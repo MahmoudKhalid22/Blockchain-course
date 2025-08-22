@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-5378a9387eeab716a2f1fe7e6ccbb1aa12ebadd9",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/Lottery.sol": "project/contracts/Lottery.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/Lottery.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract Lottery {\r\n    address public manager;\r\n    address[] public players;\r\n\r\n    constructor() {\r\n        manager = msg.sender;\r\n    }\r\n\r\n\r\n    function enter() public payable {\r\n        require(msg.value > .01 ether, \"Minimum entry fee is 0.01 ether\");\r\n        players.push(msg.sender);\r\n    }\r\n\r\n    function random() private view returns (uint){\r\n       uint randomNumber =  uint(keccak256(abi.encodePacked(block.prevrandao, block.timestamp, players)));\r\n       return randomNumber;\r\n    }\r\n\r\n    function pickWinner() public restricted {\r\n        require(players.length > 0, \"No players in the lottery\");\r\n\r\n        uint index = random() % players.length;\r\n        address winner = players[index];\r\n        \r\n        payable(winner).transfer(address(this).balance);\r\n\r\n        players = new address[](0);\r\n    }\r\n\r\nmodifier restricted() {\r\n        require(msg.sender == manager, \"Only the manager can pick a winner\");\r\n    _;\r\n}\r\n\r\nfunction getPlayersCount() public view returns (uint) {\r\n    return players.length;\r\n}\r\n\r\n}"
+      }
+    }
+  }
+}

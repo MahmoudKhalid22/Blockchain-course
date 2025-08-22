@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-e4bf81fc672cd95c6406add127a51dc99a77af41",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/Inbox.sol": "project/contracts/Inbox.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/Inbox.sol": {
+        "content": "// SPDX-License-Identifier: MIT \r\npragma solidity ^0.8.0;\r\n\r\ncontract Inbox {\r\n    string public message;\r\n\r\n    constructor(string memory initialMessage) {\r\n        message = initialMessage;\r\n    }\r\n\r\n    function getMessage() public view returns (string memory){\r\n        return message;\r\n    }\r\n\r\n    function setMessage(string memory newMessage) public {\r\n        message = newMessage;\r\n    }\r\n}"
+      }
+    }
+  }
+}
