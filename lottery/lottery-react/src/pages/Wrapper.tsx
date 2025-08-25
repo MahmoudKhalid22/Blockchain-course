@@ -3,10 +3,14 @@ import Navbar from "../features/home/Navbar";
 
 function Wrapper() {
   return (
-    <>
-      <Navbar />
-      <Outlet />
-    </>
+    <div className="flex flex-col gap-0 h-screen">
+      <div className="">
+        <Navbar />
+      </div>
+      <div className=" h-full">
+        <Outlet />
+      </div>
+    </div>
   );
 }
 

@@ -2,7 +2,7 @@ import GameComponent from "../features/game/Game.component";
 
 function Game() {
   return (
-    <div>
+    <div className="w-full h-full">
       <GameComponent />
     </div>
   );
