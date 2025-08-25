@@ -31,13 +31,18 @@ contract Lottery {
         players = new address[](0);
     }
 
-modifier restricted() {
-        require(msg.sender == manager, "Only the manager can pick a winner");
-    _;
+    function getPlayersCount() public view returns (uint) {
+        return players.length;
+    }
+   function getPlayers() public view returns (address[] memory) {
+    return players;
 }
 
-function getPlayersCount() public view returns (uint) {
-    return players.length;
-}
+    modifier restricted() {
+            require(msg.sender == manager, "Only the manager can pick a winner");
+        _;
+    }
+
+
 
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ABI, CONTRACT_ADDRESS } from "../config";
 import { Contract } from "ethers";
 import type { JsonRpcSigner } from "ethers";
+import { useNavigate } from "react-router-dom";
 
 declare global {
   interface Window {
@@ -18,6 +19,9 @@ function useWeb3() {
   const [manager, setManager] = useState("");
   const [provider, setProvider] = useState<Web3Provider | null>(null);
   const [signer, setSigner] = useState<JsonRpcSigner | any>(null);
+  const [playersCount, setPlayersCount] = useState(0);
+  const [players, setPlayers] = useState([]);
+  const [balance, setBalance] = useState<any>(null);
 
   const connectWallet = async () => {
     try {
@@ -82,6 +86,35 @@ function useWeb3() {
       alert("Failed to get manager. Check console for details.");
     }
   };
+  const getPlayers = async () => {
+    const playersData = await lotteryContractInstance?.getPlayers();
+
+    if (playersData) setPlayers(playersData);
+  };
+  const getPlayersNumber = async () => {
+    try {
+      const pCount = await lotteryContractInstance?.getPlyersCount();
+      if (pCount) setPlayersCount(pCount);
+    } catch (err) {
+      alert("some error occured");
+    }
+  };
+
+  const getContractBalance = async () => {
+    const contractBalance = await provider?.getBalance(CONTRACT_ADDRESS);
+    setBalance(contractBalance);
+  };
+
+  // const getPlayerBalance = async (address: string) => {
+  //   const balance = await provider?.getBalance(address);
+  //   if (balance) return ethers.formatEther(balance); // Converts from wei to ETH
+  // };
+
+  const enterGame = async () => {
+    await lotteryContractInstance?.enter();
+    getContractBalance();
+    // navigate("/game");
+  };
 
   return {
     connectWallet,
@@ -89,6 +122,16 @@ function useWeb3() {
     connectToLotteryContract,
     getManager,
     manager,
+    getPlayersNumber,
+    playersCount,
+
+    //
+    getPlayers,
+    players,
+    // BALANCE OF THE ADDRESS
+    balance,
+    // enter the game
+    enterGame,
   };
 }
 

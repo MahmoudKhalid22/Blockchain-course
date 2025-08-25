@@ -1,33 +1,51 @@
-import useWeb3 from "../useWeb3";
+import React, { useState } from "react";
+
+import { ethers } from "ethers";
+import { useWallet } from "../useWallet";
+import { useLottery } from "../useLottery";
 
 function HomeComponent() {
-  const { connectWallet, userAccount } = useWeb3();
-  return (
-    <div className="flex items-start justify-center gap-12 py-6 px-6 w-full">
-      <div className="flex flex-col items-start gap-12 py-12">
-        <h2 className="text-4xl font-bold">Web3 Lottery</h2>
-        <p className="text-2xl font-light">
-          Join the decentralized prize pool. Enter now!
-        </p>
-        <button
-          onClick={connectWallet}
-          className="uppercase text-3xl font-bold bg-[#1e90ff] w-full py-3 cursor-pointer rounded-xl transition-colors hover:bg-[#1b82e6]"
-        >
-          {userAccount
-            ? userAccount.slice(0, 4) + "..." + userAccount.slice(-4)
-            : "connect wallet"}
-        </button>
-        {userAccount && (
-          <button
-            onClick={connectWallet}
-            className="uppercase text-3xl font-bold bg-[#1e90ff] w-full py-3 cursor-pointer rounded-xl transition-colors hover:bg-[#1b82e6]"
-          >
-            Enter
-          </button>
-        )}
+  const { isConnected, userAccount, connectWallet } = useWallet();
+  const { manager, players, balance, enterGame, isLoading } = useLottery();
+  const [entryAmount, setEntryAmount] = React.useState("0.1");
+
+  const handleEnterGame = async () => {
+    try {
+      await enterGame(+entryAmount);
+      alert("Successfully entered the lottery!");
+    } catch (error: any) {
+      alert(`Failed to enter game: ${error.message}`);
+    }
+  };
+
+  if (!isConnected) {
+    return (
+      <div>
+        <button onClick={connectWallet}>Connect Wallet</button>
       </div>
-      <div className="flex justify-end">
-        <img src="/heroImage.png" alt="hero" className="w-3/4 h-3/4" />
+    );
+  }
+
+  return (
+    <div>
+      <h1>Lottery Dashboard</h1>
+      <p>Your Account: {userAccount}</p>
+      <p>Manager: {manager}</p>
+      <p>Players: {players.length}</p>
+      <p>Balance: {ethers.formatEther(balance || "0")} ETH</p>
+
+      <div>
+        <input
+          type="number"
+          step="0.01"
+          min="0"
+          value={entryAmount}
+          onChange={(e) => setEntryAmount(e.target.value)}
+          placeholder="Amount in ETH"
+        />
+        <button onClick={handleEnterGame} disabled={isLoading}>
+          {isLoading ? "Processing..." : `Enter Game (${entryAmount} ETH)`}
+        </button>
       </div>
     </div>
   );
