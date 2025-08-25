@@ -1,51 +1,27 @@
-import React, { useState } from "react";
-
-import { ethers } from "ethers";
-import { useWallet } from "../useWallet";
-import { useLottery } from "../useLottery";
+import { Link } from "react-router-dom";
 
 function HomeComponent() {
-  const { isConnected, userAccount, connectWallet } = useWallet();
-  const { manager, players, balance, enterGame, isLoading } = useLottery();
-  const [entryAmount, setEntryAmount] = React.useState("0.1");
-
-  const handleEnterGame = async () => {
-    try {
-      await enterGame(+entryAmount);
-      alert("Successfully entered the lottery!");
-    } catch (error: any) {
-      alert(`Failed to enter game: ${error.message}`);
-    }
-  };
-
-  if (!isConnected) {
-    return (
-      <div>
-        <button onClick={connectWallet}>Connect Wallet</button>
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <h1>Lottery Dashboard</h1>
-      <p>Your Account: {userAccount}</p>
-      <p>Manager: {manager}</p>
-      <p>Players: {players.length}</p>
-      <p>Balance: {ethers.formatEther(balance || "0")} ETH</p>
-
-      <div>
-        <input
-          type="number"
-          step="0.01"
-          min="0"
-          value={entryAmount}
-          onChange={(e) => setEntryAmount(e.target.value)}
-          placeholder="Amount in ETH"
-        />
-        <button onClick={handleEnterGame} disabled={isLoading}>
-          {isLoading ? "Processing..." : `Enter Game (${entryAmount} ETH)`}
-        </button>
+    <div className="h-full">
+      <div className="container"></div>
+      <div className="flex items-center justify-center w-full h-full p-12">
+        <div className="flex flex-col gap-16 justify-center h-full">
+          <div className="flex flex-col gap-6">
+            <h2 className="text-4xl font-bold text-white">Web3 Lottery</h2>
+            <p className="text-2xl font-light text-white w-3/4">
+              Join the decentralized prize pool. Enter now!
+            </p>
+          </div>
+          <Link
+            to={"/game"}
+            className="text-center transition-colors duration-300 cursor-pointer hover:bg-[#54198c] bg-[#5D1C9B] py-3 rounded-lg text-white w-[25rem] text-2xl font-semibold"
+          >
+            TRY YOUR LUCK
+          </Link>
+        </div>
+        <div className="">
+          <img src="/heroImage.png" alt="hero" className="h-[25rem]" />
+        </div>
       </div>
     </div>
   );
