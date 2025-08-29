@@ -84,7 +84,7 @@ function GameComponent() {
               min="0"
               value={entryAmount}
               onChange={(e) => setEntryAmount(e.target.value)}
-              placeholder="Amount in USDT"
+              placeholder="Amount in ETH"
               className="border-2 rounded-lg py-4 px-6 mt-6 border-white"
             />
             <button
@@ -92,7 +92,7 @@ function GameComponent() {
               disabled={isLoading}
               className="text-2xl mt-6 buttonGlow w-fit bg-[#00FF99] text-white py-3 rounded-lg px-6 transition-colors  duration-300 cursor-pointer"
             >
-              {isLoading ? "Processing..." : `PAY (${entryAmount} USDT)`}
+              {isLoading ? "Processing..." : `PAY (${entryAmount} ETH)`}
             </button>
           </div>
         )}
