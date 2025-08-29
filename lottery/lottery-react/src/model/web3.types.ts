@@ -15,6 +15,7 @@ export interface LotteryState {
   manager: string;
   players: string[];
   playersCount: number;
+  lastWinner: string;
   balance: string;
   isLoading: boolean;
 }

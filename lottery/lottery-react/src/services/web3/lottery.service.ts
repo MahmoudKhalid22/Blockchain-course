@@ -1,4 +1,4 @@
-import { ethers, type JsonRpcSigner } from "ethers";
+import { ethers, JsonRpcSigner } from "ethers";
 import type { Contract } from "ethers";
 import { ABI, CONTRACT_ADDRESS } from "../../config";
 import type { ContractRunner } from "ethers";
@@ -39,7 +39,19 @@ export class LotteryService {
     await tx.wait(); // Wait for transaction confirmation
   }
 
+  async pickWinner() {
+    // if (!(this.contract.signer instanceof JsonRpcSigner)) {
+    //   throw new Error("Contract is not connected to a signer");
+    // }
+    const tx = await this.contract.pickWinner();
+    await tx.wait(); // Wait for transaction confirmation
+    return this.getWinner();
+  }
+
   getContract(): Contract {
     return this.contract;
+  }
+  async getWinner(): Promise<string> {
+    return await this.contract.getLastWinner();
   }
 }

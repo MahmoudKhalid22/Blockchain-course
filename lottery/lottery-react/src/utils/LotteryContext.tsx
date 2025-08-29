@@ -12,6 +12,7 @@ type LotteryAction =
   | { type: "SET_MANAGER"; payload: string }
   | { type: "SET_PLAYERS"; payload: string[] }
   | { type: "SET_PLAYERS_COUNT"; payload: number }
+  | { type: "SET_LAST_WINNER"; payload: string }
   | { type: "SET_BALANCE"; payload: string }
   | { type: "RESET" };
 
@@ -20,6 +21,7 @@ const initialState: LotteryState = {
   manager: "",
   players: [],
   playersCount: 0,
+  lastWinner: "",
   balance: "0",
   isLoading: false,
 };
@@ -39,6 +41,8 @@ function lotteryReducer(
       return { ...state, players: action.payload };
     case "SET_PLAYERS_COUNT":
       return { ...state, playersCount: action.payload };
+    case "SET_LAST_WINNER":
+      return { ...state, lastWinner: action.payload };
     case "SET_BALANCE":
       return { ...state, balance: action.payload };
     case "RESET":

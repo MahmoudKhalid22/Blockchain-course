@@ -1,13 +1,26 @@
 import { ethers } from "ethers";
 import { useWallet } from "../useWallet";
 import { useLottery } from "../useLottery";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function GameComponent() {
   const { isConnected, userAccount, connectWallet } = useWallet();
-  const { manager, players, balance, enterGame, isLoading } = useLottery();
+  const {
+    manager,
+    playersCount,
+    balance,
+    enterGame,
+    isLoading,
+    loadLotteryData,
+    pickWinner,
+    lastWinner,
+  } = useLottery();
   const [entryAmount, setEntryAmount] = useState("0.1");
   const [openPay, setOpenPay] = useState(false);
+
+  useEffect(() => {
+    loadLotteryData();
+  }, [loadLotteryData]);
 
   const handleEnterGame = async () => {
     try {
@@ -41,8 +54,8 @@ function GameComponent() {
         )}
         <div className="flex flex-col gap-6">
           <div>
-            <span className="text-2xl">CONTRACT PLAYERS:</span>{" "}
-            <span className="text-4xl font-semibold">{players.length}</span>
+            <span className="text-2xl">PLAYERS:</span>{" "}
+            <span className="text-4xl font-semibold">{playersCount}</span>
           </div>
           <div>
             <span className="text-2xl">CONTRACT BALANCE:</span>{" "}
@@ -71,7 +84,7 @@ function GameComponent() {
               min="0"
               value={entryAmount}
               onChange={(e) => setEntryAmount(e.target.value)}
-              placeholder="Amount in ETH"
+              placeholder="Amount in USDT"
               className="border-2 rounded-lg py-4 px-6 mt-6 border-white"
             />
             <button
@@ -79,7 +92,7 @@ function GameComponent() {
               disabled={isLoading}
               className="text-2xl mt-6 buttonGlow w-fit bg-[#00FF99] text-white py-3 rounded-lg px-6 transition-colors  duration-300 cursor-pointer"
             >
-              {isLoading ? "Processing..." : `PAY (${entryAmount} ETH)`}
+              {isLoading ? "Processing..." : `PAY (${entryAmount} USDT)`}
             </button>
           </div>
         )}
@@ -87,8 +100,8 @@ function GameComponent() {
 
       <div>
         <div className="text-[#00FF99] flex items-center gap-3">
-          <span className="text-3xl">WINNER: </span>
-          <span className="text-xl font-light">{userAccount}</span>
+          {/* <span className="text-3xl">WINNER: </span>
+          <span className="text-xl font-light">{lastWinner}</span> */}
 
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +123,10 @@ function GameComponent() {
             ></path>
           </svg>
         </div>
-        <button className=" w-full text-2xl mt-2 buttonGlow bg-[#3498DB] text-white py-3 rounded-lg px-6 transition-colors  duration-300 cursor-pointer">
+        <button
+          onClick={pickWinner}
+          className=" w-full text-2xl mt-2 buttonGlow bg-[#3498DB] text-white py-3 rounded-lg px-6 transition-colors  duration-300 cursor-pointer"
+        >
           PICK THE WINNER
         </button>
       </div>
