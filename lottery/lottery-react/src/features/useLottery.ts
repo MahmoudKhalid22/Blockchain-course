@@ -13,7 +13,7 @@ export function useLottery() {
     }
 
     const lotteryService = new LotteryService(
-      web3State.signer || web3State.provider!
+      web3State?.signer || web3State.provider!
     );
     const contract = lotteryService.getContract();
 
@@ -60,10 +60,26 @@ export function useLottery() {
       try {
         dispatch({ type: "SET_LOADING", payload: true });
         const lotteryService = new LotteryService(web3State.signer);
-        await lotteryService.enterGame(amount);
+        const tx: any = await lotteryService.enterGame(amount);
+        if (tx && tx.wait) {
+          console.log("Waiting for transaction confirmation...");
+          await tx.wait(1); // Wait for 1 confirmation
+          console.log("Transaction confirmed!");
 
-        // Reload data after entering
-        await loadLotteryData();
+          // Add delay to ensure blockchain state is updated
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          // Retry fetching data to ensure the latest state
+          for (let i = 0; i < 3; i++) {
+            try {
+              await loadLotteryData();
+              break; // Exit loop if successful
+            } catch (error) {
+              console.warn(`Retry ${i + 1} failed, retrying...`);
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+            }
+          }
+        }
       } catch (error) {
         console.error("Failed to enter game:", error);
         throw error;

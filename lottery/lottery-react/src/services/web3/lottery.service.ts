@@ -1,13 +1,12 @@
-import { ethers, JsonRpcSigner } from "ethers";
+import { ethers } from "ethers";
 import type { Contract } from "ethers";
 import { ABI, CONTRACT_ADDRESS } from "../../config";
-import type { ContractRunner } from "ethers";
 import type { Web3Provider } from "@ethersproject/providers";
 
 export class LotteryService {
   private contract: Contract;
 
-  constructor(signerOrProvider: ContractRunner) {
+  constructor(signerOrProvider: any) {
     this.contract = new ethers.Contract(
       CONTRACT_ADDRESS,
       ABI,
@@ -32,11 +31,11 @@ export class LotteryService {
   }
 
   async enterGame(amount: number): Promise<void> {
-    console.log("amount to bc: ", amount);
     const tx = await this.contract.enter({
       value: ethers.parseEther(amount.toString()),
     });
-    await tx.wait(); // Wait for transaction confirmation
+    // await tx.wait(); // Wait for transaction confirmation
+    return tx;
   }
 
   async pickWinner() {

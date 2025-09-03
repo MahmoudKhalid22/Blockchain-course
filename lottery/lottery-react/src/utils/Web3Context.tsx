@@ -1,5 +1,10 @@
-import React, { createContext, useContext, useReducer, ReactNode } from "react";
-import type { Web3State } from "../types/web3.types";
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  type ReactNode,
+} from "react";
+import type { Web3State } from "../model/web3.types";
 
 type Web3Action =
   | { type: "CONNECT_START" }

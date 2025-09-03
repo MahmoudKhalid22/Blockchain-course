@@ -13,7 +13,8 @@ function GameComponent() {
     isLoading,
     loadLotteryData,
     pickWinner,
-    lastWinner,
+    // lastWinner,
+    // lotteryState,
   } = useLottery();
   const [entryAmount, setEntryAmount] = useState("0.1");
   const [openPay, setOpenPay] = useState(false);
